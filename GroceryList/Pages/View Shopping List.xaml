@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GroceryList.ShoppingListViewPage"
+             Title="Shopping List">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="" Clicked="OnClicked_DeleteShoppingList" IconImageSource="trash.png"/>
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout>
+        <Entry Placeholder="Search for groceries e.g. milk..." TextChanged="OnTextChangedInInput_UserHasSearchedForItem" Completed="OnTextCompltedInInput_UserHasFinishedSearchingForItem" ClearButtonVisibility="WhileEditing" Keyboard="Text"/>
+
+        <ListView>
+            
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,52 @@
+{
+    "openapi": "3.0.4",
+    "info": {
+        "title": "Foodstuffs API - Pak 'n Save & New World",
+        "description": "Foodstuffs API, providing access to Pak'nSave and New World stores without using their website or mobile app.",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "https://www.paknsave.co.nz/CommonApi/",
+            "description": "Pak 'n Save's API Base URL"
+        },
+        {
+            "url": "https://www.newworld.co.nz/CommonApi/",
+            "description": "New World's API Base URL"
+        }
+    ],
+    "paths": {
+        "/CommonApi/Account/GetCurrentUser": {
+            "get": {
+                "summary": "Returns an JWT Token for use with the API.",
+                "description": "Check which API calls require this, some do not.",
+                "responses": {
+                    "200": {
+                        "description": "A JSON Object, containing the JWT Token, expiration date, and other information.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "description": "The JWT Token."
+                                        },
+                                        "expiresIn": {
+                                            "type": "integer",
+                                            "description": "The expiration date of the token in seconds."
+                                        },
+                                        "userId": {
+                                            "type": "string",
+                                            "description": "The ID of the user."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
