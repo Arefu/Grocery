@@ -20,6 +20,9 @@
             "get": {
                 "summary": "Returns an JWT Token for use with the API.",
                 "description": "Check which API calls require this, some do not.",
+                "tags": [
+                    "Users"
+                ],
                 "responses": {
                     "200": {
                         "description": "A JSON Object, containing the JWT Token, expiration date, and other information.",
@@ -28,22 +31,181 @@
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "token": {
+                                        "access_token": {
                                             "type": "string",
                                             "description": "The JWT Token."
                                         },
-                                        "expiresIn": {
-                                            "type": "integer",
-                                            "description": "The expiration date of the token in seconds."
-                                        },
-                                        "userId": {
+                                        "expires_time": {
                                             "type": "string",
-                                            "description": "The ID of the user."
+                                            "description": "The expiration date of the token.",
+                                            "example": "2025-04-22 09:22:37Z"
+                                        },
+                                        "current_time": {
+                                            "type": "string",
+                                            "description": "The current server time.",
+                                            "example": "2025-04-22 08:52:37Z"
+                                        },
+                                        "hasClubCard": {
+                                            "type": "boolean",
+                                            "description": "Whether the user has a club card.",
+                                            "example": true
                                         }
                                     }
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/CommonApi/SearchAutoComplete/AutoComplete": {
+            "post": {
+                "summary": "Returns a list of products matching the search term.",
+                "description": "Search for products by name/barcode/item code.",
+                "tags": [
+                    "Store"
+                ],
+                "requestBody": {
+                    "description": "The Search term to look for.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "SearchTerm": {
+                                        "type": "string",
+                                        "description": "The term to search for",
+                                        "example": "Milk"
+                                    },
+                                    "IsMobileView": {
+                                        "type": "boolean",
+                                        "description": "Whether the user is on a mobile view"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "productCategoryResults": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "productResults": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "ProductName": {
+                                                        "type": "string"
+                                                    },
+                                                    "ProductThumbnailUrl": {
+                                                        "type": "string",
+                                                        "format": "uri"
+                                                    },
+                                                    "ProductUrl": {
+                                                        "type": "string"
+                                                    },
+                                                    "ProductWeightDisplayName": {
+                                                        "type": "string"
+                                                    },
+                                                    "ProductBrand": {
+                                                        "type": "string"
+                                                    },
+                                                    "ProductId": {
+                                                        "type": "string"
+                                                    },
+                                                    "SaleType": {
+                                                        "type": "string"
+                                                    },
+                                                    "ProductVariants": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "minUnit": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "type": {
+                                                                    "type": "string",
+                                                                    "example": "UNITS"
+                                                                },
+                                                                "stepSize": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "unit": {
+                                                                    "type": "string",
+                                                                    "example": "ea"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "Restricted": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "Tobacco": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "RangedOnline": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "RangedInStore": {
+                                                        "type": "boolean"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "ProductName",
+                                                    "ProductThumbnailUrl",
+                                                    "ProductUrl",
+                                                    "ProductWeightDisplayName",
+                                                    "ProductBrand",
+                                                    "ProductId",
+                                                    "SaleType",
+                                                    "ProductVariants",
+                                                    "Restricted",
+                                                    "Tobacco",
+                                                    "RangedOnline",
+                                                    "RangedInStore"
+                                                ]
+                                            }
+                                        },
+                                        "Success": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "productCategoryResults",
+                                        "productResults",
+                                        "Success"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/CommonApi/Cart/Index": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "tags": [
+                    "Store"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The User's Cart + Selected Store Information"
                     }
                 }
             }
