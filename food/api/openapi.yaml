@@ -1,0 +1,386 @@
+openapi: 3.0.4
+info:
+  description: "Foodstuffs API, providing access to Pak'nSave and New World stores\
+    \ without using their website or mobile app."
+  title: Foodstuffs API - Pak 'n Save & New World
+  version: 0.0.1
+servers:
+- description: Pak 'n Save's API Base URL
+  url: https://api-prod.prod.fsniwaikato.kiwi/
+- description: New World's API Base URL
+  url: https://www.newworld.co.nz/CommonApi/
+paths:
+  /prod/mobile/v1/users/login/refreshtoken:
+    post:
+      description: "Check which API calls require this, some do not."
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCurrentUser_Response'
+          description: "A JSON Object, containing the JWT Token, expiration date,\
+            \ and other information."
+          headers:
+            Set-Cookie:
+              explode: false
+              schema:
+                example: "[\"SessionCookieIdV3=2f38e0d70567487fb0481fa2ee44e063; expires=Tue,\
+                  \ 06-May-2025 12:00:00 GMT; path=/; secure; HttpOnly\",\"SessionCookieIdV3=2f38e0d70567487fb0481fa2ee44e063;\
+                  \ expires=Tue, 06-May-2025 12:00:00 GMT; path=/; secure; HttpOnly\"\
+                  ,\"GeolocationInformation={\\\"IsUnknown\\\":false,\\\"AreaCode\\\
+                  \":\\\"N/A\\\",\\\"BusinessName\\\":\\\"N/A\\\",\\\"City\\\":\\\"\
+                  Hamilton\\\",\\\"Country\\\":\\\"NZ\\\",\\\"Dns\\\":\\\"N/A\\\"\
+                  ,\\\"Isp\\\":\\\"N/A\\\",\\\"Latitude\\\":-37.798,\\\"Longitude\\\
+                  \":175.2717,\\\"MetroCode\\\":\\\"N/A\\\",\\\"PostalCode\\\":\\\"\
+                  3204\\\",\\\"Region\\\":\\\"N/A\\\",\\\"Url\\\":\\\"N/A\\\"}; expires=Sat,\
+                  \ 21-Apr-2035 07:40:16 GMT; path=/; secure; HttpOnly; SameSite=Strict\"\
+                  ]"
+                type: string
+              style: simple
+      summary: Returns an Access JWT Token for use with the API.
+      tags:
+      - Users
+  /prod/mobile/v1/error:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                INVALID_PROMO_CODE:
+                  title: Oops!
+                  text: "Sorry, your promo code is invalid"
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/_prod_mobile_v1_error_get_200_response_value'
+                type: object
+          description: Example error response
+      summary: Returns all Localized Errors
+      tags:
+      - Locale
+  /prod/mobile/ecomm-products/PNS/{store-guid}/search?q={term}:
+    post:
+      parameters:
+      - description: The Store GUID you're searching on.
+        example: 8cd700ae-d96f-4761-bd7a-805d6b93536d
+        explode: false
+        in: path
+        name: store-guid
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: The item you're searching for
+        example: Eggs
+        explode: false
+        in: path
+        name: term
+        required: true
+        schema:
+          format: text
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                tobaccoFiltered: false
+                totalHits: 33
+                hitsPerPage: 100
+                numberOfPages: 1
+                page: 0
+                products:
+                - productId: 5102416-EA-000
+                  name: Medium Light Fruit Cake
+                  units: ea
+                  categories:
+                  - Bakery
+                  - Fresh Cakes & Muffins
+                  price: 729
+                  unitPrice: $7.29/ea
+                  productImageUrls:
+                    "100": https://a.fsimg.co.nz/prod/product/retail/fan/image/100x100/5102416.png
+                    "200": https://a.fsimg.co.nz/prod/product/retail/fan/image/200x200/5102416.png
+                    "400": https://a.fsimg.co.nz/prod/product/retail/fan/image/400x400/5102416.png
+                    "500": https://a.fsimg.co.nz/prod/product/retail/fan/image/500x500/5102416.png
+                  availableInStore: true
+                  availableInOnline: true
+                  tobaccoFlag: false
+                  liquorFlag: false
+                  saleType: UNITS
+                - productId: 5302068-EA-000
+                  name: Peach & Passionfruit Cake
+                  units: 1pk
+                  categories:
+                  - Bakery
+                  - Cakes & Muffins
+                  price: 549
+                  unitPrice: $5.49/ea
+                  productImageUrls:
+                    "100": https://a.fsimg.co.nz/prod/product/retail/fan/image/100x100/5302068.png
+                    "200": https://a.fsimg.co.nz/prod/product/retail/fan/image/200x200/5302068.png
+                    "400": https://a.fsimg.co.nz/prod/product/retail/fan/image/400x400/5302068.png
+                    "500": https://a.fsimg.co.nz/prod/product/retail/fan/image/500x500/5302068.png
+                  decalCode: "6000"
+                  decalImageUrl: https://a.fsimg.co.nz/prod/brand/PNS/app/decal/Extra_Low.png
+                  availableInStore: true
+                  availableInOnline: true
+                  tobaccoFlag: false
+                  liquorFlag: false
+                  saleType: UNITS
+                filters:
+                  Deals:
+                    Deals: 2
+                  Dietary & lifestyle:
+                    Non-GMO: 1
+                  Categories:
+                    Cakes & Muffins: 2
+                    Fresh Cakes & Muffins: 31
+                    Gift Ideas for Mum: 2
+                  Brands:
+                    Bakery: 1
+              schema:
+                $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response'
+          description: Example search response
+      summary: Search for Items in Shop
+      tags:
+      - Shop
+components:
+  schemas:
+    _prod_mobile_v1_error_get_200_response_value:
+      properties:
+        title:
+          type: string
+        text:
+          type: string
+      required:
+      - text
+      - title
+      type: object
+    GetCurrentUser_Response:
+      example:
+        access_token: access_token
+        hasClubCard: true
+        expires_time: 2025-04-22 09:22:37Z
+        current_time: 2025-04-22 08:52:37Z
+      properties:
+        access_token:
+          description: The JWT Token.
+          type: string
+        expires_time:
+          description: The expiration date of the token.
+          example: 2025-04-22 09:22:37Z
+          type: string
+        current_time:
+          description: The current server time.
+          example: 2025-04-22 08:52:37Z
+          type: string
+        hasClubCard:
+          description: Whether the user has a club card.
+          example: true
+          type: boolean
+      title: GetCurrentUser_Response
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Deals:
+      example:
+        Deals: 2
+      properties:
+        Deals:
+          type: integer
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_products_inner:
+      example:
+        unitPrice: unitPrice
+        tobaccoFlag: true
+        productImageUrls:
+          "100": "100"
+          "200": "200"
+          "400": "400"
+          "500": "500"
+        productId: productId
+        availableInOnline: true
+        price: 5
+        saleType: saleType
+        name: name
+        units: units
+        categories:
+        - categories
+        - categories
+        availableInStore: true
+        liquorFlag: true
+      properties:
+        productId:
+          type: string
+        name:
+          type: string
+        units:
+          type: string
+        categories:
+          items:
+            type: string
+          type: array
+        price:
+          type: integer
+        unitPrice:
+          type: string
+        productImageUrls:
+          $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_products_inner_productImageUrls'
+        availableInStore:
+          type: boolean
+        availableInOnline:
+          type: boolean
+        tobaccoFlag:
+          type: boolean
+        liquorFlag:
+          type: boolean
+        saleType:
+          type: string
+      required:
+      - name
+      - price
+      - productId
+      - productImageUrls
+      - unitPrice
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Categories:
+      example:
+        Fresh Cakes & Muffins: 3
+        Cakes & Muffins: 9
+        Gift Ideas for Mum: 2
+      properties:
+        Cakes & Muffins:
+          type: integer
+        Fresh Cakes & Muffins:
+          type: integer
+        Gift Ideas for Mum:
+          type: integer
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Brands:
+      example:
+        Bakery: 4
+      properties:
+        Bakery:
+          type: integer
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_products_inner_productImageUrls:
+      example:
+        "100": "100"
+        "200": "200"
+        "400": "400"
+        "500": "500"
+      properties:
+        "100":
+          type: string
+        "200":
+          type: string
+        "400":
+          type: string
+        "500":
+          type: string
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response:
+      example:
+        numberOfPages: 1
+        totalHits: 0
+        hitsPerPage: 6
+        page: 5
+        filters:
+          Categories:
+            Fresh Cakes & Muffins: 3
+            Cakes & Muffins: 9
+            Gift Ideas for Mum: 2
+          Dietary & lifestyle:
+            Non-GMO: 7
+          Brands:
+            Bakery: 4
+          Deals:
+            Deals: 2
+        tobaccoFiltered: true
+        products:
+        - unitPrice: unitPrice
+          tobaccoFlag: true
+          productImageUrls:
+            "100": "100"
+            "200": "200"
+            "400": "400"
+            "500": "500"
+          productId: productId
+          availableInOnline: true
+          price: 5
+          saleType: saleType
+          name: name
+          units: units
+          categories:
+          - categories
+          - categories
+          availableInStore: true
+          liquorFlag: true
+        - unitPrice: unitPrice
+          tobaccoFlag: true
+          productImageUrls:
+            "100": "100"
+            "200": "200"
+            "400": "400"
+            "500": "500"
+          productId: productId
+          availableInOnline: true
+          price: 5
+          saleType: saleType
+          name: name
+          units: units
+          categories:
+          - categories
+          - categories
+          availableInStore: true
+          liquorFlag: true
+      properties:
+        tobaccoFiltered:
+          type: boolean
+        totalHits:
+          type: integer
+        hitsPerPage:
+          type: integer
+        numberOfPages:
+          type: integer
+        page:
+          type: integer
+        products:
+          items:
+            $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_products_inner'
+          type: array
+        filters:
+          $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters'
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Dietary___lifestyle:
+      example:
+        Non-GMO: 7
+      properties:
+        Non-GMO:
+          type: integer
+      type: object
+    _prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters:
+      example:
+        Categories:
+          Fresh Cakes & Muffins: 3
+          Cakes & Muffins: 9
+          Gift Ideas for Mum: 2
+        Dietary & lifestyle:
+          Non-GMO: 7
+        Brands:
+          Bakery: 4
+        Deals:
+          Deals: 2
+      properties:
+        Deals:
+          $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Deals'
+        Dietary & lifestyle:
+          $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Dietary___lifestyle'
+        Categories:
+          $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Categories'
+        Brands:
+          $ref: '#/components/schemas/_prod_mobile_ecomm_products_PNS__store_guid__search_q__term__post_200_response_filters_Brands'
+      type: object
+
