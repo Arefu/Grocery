@@ -7,15 +7,19 @@
     Shell.FlyoutBehavior="Flyout"
     Title="Grocery List">
     
-    <FlyoutItem Title="Home" Icon="home.png">
-        <Tab>
-            <ShellContent Title="Home" ContentTemplate="{DataTemplate local:MainPage}" Route="Home" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem Title="Shopping List" Icon="List.png">
+    <FlyoutItem Title="Shopping List" Icon="list.png">
         <Tab>
             <ShellContent Title="Shopping Lists" ContentTemplate="{DataTemplate local:ShoppingListsPage}" Route="ShoppingLists" />
         </Tab>
     </FlyoutItem>
-
+    <FlyoutItem Title="Sales" Icon="save.png">
+        <Tab>
+            <ShellContent Title="Store Deals" ContentTemplate="{DataTemplate local:StoreDealsPage}" Route="StoreDeals" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Sales" Icon="save.png">
+        <Tab>
+            <ShellContent Title="Store Deals" ContentTemplate="{DataTemplate local:ShoppingListViewPage}" Route="StoreDeals" />
+        </Tab>
+    </FlyoutItem>
 </Shell>

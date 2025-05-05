@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-android</TargetFrameworks>
+		<TargetFrameworks>net8.0-android</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
@@ -60,24 +60,32 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.9.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\View Shopping List.xaml.cs">
+	  <ProjectReference Include="..\..\..\..\Downloads\food\src\Org.OpenAPITools\Org.OpenAPITools.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="UI Elements\Pages\View Shopping List.xaml.cs">
 	    <DependentUpon>View Shopping List.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\Shopping Lists List.xaml.cs">
-	    <DependentUpon>Shopping Lists List.xaml</DependentUpon>
+	  <Compile Update="UI Elements\Pages\Shopping Lists Page.xaml.cs">
+	    <DependentUpon>Shopping Lists Page.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\View Shopping List.xaml">
+	  <MauiXaml Update="UI Elements\Pages\StoreDealsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\Shopping Lists List.xaml">
+	  <MauiXaml Update="UI Elements\Pages\View Shopping List.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="UI Elements\Pages\Shopping Lists Page.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
