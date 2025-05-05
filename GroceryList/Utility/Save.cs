@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 using GroceryList.Types;
+using GroceryList.ViewModels;
 
 namespace GroceryList.Utility
 {
@@ -9,7 +10,7 @@ namespace GroceryList.Utility
     {
         private const string FileName = "shopping_list.json";
 
-        public static async Task<ObservableCollection<Shopping_List_Entry>> LoadShoppingListAsync()
+        public static async Task<ObservableCollection<MyShoppingLists_ViewModel.Shopping_List_Entry>> LoadShoppingListAsync()
         {
             try
             {
@@ -17,21 +18,21 @@ namespace GroceryList.Utility
 
                 if (!File.Exists(filePath))
                 {
-                    return new ObservableCollection<Shopping_List_Entry>();
+                    return new ObservableCollection<MyShoppingLists_ViewModel.Shopping_List_Entry>();
                 }
 
                 string json =  File.ReadAllText(filePath);
-                var Json = JsonSerializer.Deserialize<ObservableCollection<Shopping_List_Entry>>(json) ?? new ObservableCollection<Shopping_List_Entry>();
+                var Json = JsonSerializer.Deserialize<ObservableCollection<MyShoppingLists_ViewModel.Shopping_List_Entry>>(json) ?? new ObservableCollection<MyShoppingLists_ViewModel.Shopping_List_Entry>();
                 return Json;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading shopping list: {ex.Message}");
-                return new ObservableCollection<Shopping_List_Entry>();
+                return new ObservableCollection<MyShoppingLists_ViewModel.Shopping_List_Entry>();
             }
         }
 
-        public static async Task SaveShoppingListAsync(ObservableCollection<Shopping_List_Entry> shoppingLists)
+        public static async Task SaveShoppingListAsync(ObservableCollection<MyShoppingLists_ViewModel.Shopping_List_Entry> shoppingLists)
         {
             try
             {
